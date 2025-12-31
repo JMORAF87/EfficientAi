@@ -1,71 +1,41 @@
-export default async function handler(request) {
-  if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { input } = await request.json().catch(() => ({}));
-  if (!input) {
-    return new Response(JSON.stringify({ error: "Missing input" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  const { input } = req.body || {};
+  if (!input) return res.status(400).json({ error: "Missing input" });
 
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_API_KEY) {
-    return new Response(JSON.stringify({ error: "Missing GEMINI_API_KEY env var" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+  if (!GEMINI_API_KEY) return res.status(500).json({ error: "Missing GEMINI_API_KEY env var" });
 
-  // System prompt you requested
   const SYSTEM_PROMPT =
     "You are an expert marketing assistant for small business owners; provide clean, professional, and actionable advice.";
 
-  // Model pick: fast/cheap. You can change to gemini-2.5-flash if you want.
   const MODEL = "gemini-2.0-flash";
-
-  // REST endpoint format (Gemini docs)
-  const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-
-  const payload = {
-    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: [{ role: "user", parts: [{ text: input }] }],
-    generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
-  };
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
   try {
     const r = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: [{ role: "user", parts: [{ text: input }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
+      }),
     });
 
-    if (!r.ok) {
-      const errText = await r.text().catch(() => "");
-      return new Response(JSON.stringify({ error: errText || "Gemini API error" }), {
-        status: r.status,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const raw = await r.text();
+    if (!r.ok) return res.status(r.status).json({ error: raw || "Gemini API error" });
 
-    const json = await r.json();
-    const output =
-      json?.candidates?.[0]?.content?.parts?.map(p => p.text).join("")?.trim() || "";
+    const json = JSON.parse(raw);
+    const output = (json?.candidates?.[0]?.content?.parts || [])
+      .map(p => p.text || "")
+      .join("")
+      .trim();
 
-    return new Response(JSON.stringify({ output }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return res.status(200).json({ output });
   } catch (e) {
-    return new Response(JSON.stringify({ error: e?.message || "Server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return res.status(500).json({ error: e?.message || "Server error" });
   }
 }
+
