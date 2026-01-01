@@ -3,158 +3,672 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EfficientAI - Professional Interface</title>
+  <title>EfficientAI - Marketing Blueprint Generator</title>
   <style>
-    :root {
-      --navy: #1B263B;
-      --white: #FFFFFF;
-      --slate: #778DA9;
-      --light-gray: #E0E1DD;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--light-gray);
-      color: var(--navy);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
+    :root {
+      --navy: #0F172A;
+      --navy-light: #1E293B;
+      --blue: #3B82F6;
+      --blue-hover: #2563EB;
+      --white: #FFFFFF;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-300: #CBD5E1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --green: #10B981;
+      --red: #EF4444;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      color: var(--gray-700);
+    }
+
     .container {
-      background-color: var(--white);
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 650px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
-    header {
+
+    .header {
       text-align: center;
-      border-bottom: 2px solid var(--navy);
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header p {
+      font-size: 1.125rem;
+      opacity: 0.95;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      padding: 2rem;
       margin-bottom: 1.5rem;
     }
-    h1 { color: var(--navy); margin-bottom: 0.5rem; }
-    label { font-weight: bold; display: block; margin-bottom: 0.5rem; }
-    textarea {
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--blue);
+      color: var(--white);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mode-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .mode-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .mode-label {
+      display: block;
+      padding: 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.2s;
+      background: var(--gray-50);
+    }
+
+    .mode-option input[type="radio"]:checked + .mode-label {
+      border-color: var(--blue);
+      background: #EFF6FF;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .mode-label:hover {
+      border-color: var(--blue);
+      background: var(--white);
+    }
+
+    .mode-label strong {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .mode-label small {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-label .required {
+      color: var(--red);
+    }
+
+    .form-input,
+    .form-textarea {
       width: 100%;
-      padding: 10px;
-      border: 1px solid var(--slate);
-      border-radius: 4px;
+      padding: 0.75rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      background: var(--white);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-textarea {
       resize: vertical;
-      min-height: 180px;
-      box-sizing: border-box;
+      min-height: 100px;
+    }
+
+    .char-counter {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: start;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
       font-family: inherit;
     }
-    button {
-      background-color: var(--navy);
+
+    .btn-primary {
+      background: var(--blue);
       color: var(--white);
-      border: none;
-      padding: 12px 20px;
-      border-radius: 4px;
-      cursor: pointer;
       width: 100%;
-      font-size: 1rem;
-      margin-top: 1rem;
-      transition: background 0.3s;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
     }
-    button:hover { background-color: var(--slate); }
-    button:disabled {
-      opacity: 0.7;
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
+      transform: none;
     }
+
+    .btn-secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-200);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn-group .btn {
+      flex: 1;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--gray-200);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    #outputCard {
+      display: none;
+    }
+
+    #outputCard.visible {
+      display: block;
+    }
+
     #output {
-      margin-top: 1.5rem;
-      background-color: #f9f9f9;
-      border: 1px solid var(--slate);
-      padding: 1rem;
-      border-radius: 4px;
-      min-height: 140px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 1.5rem;
       white-space: pre-wrap;
-    }
-    .copy-btn {
-      background-color: var(--slate);
-      margin-top: 0.5rem;
-    }
-    .hint {
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
       font-size: 0.9rem;
-      color: #3b4a63;
-      margin-top: 0.5rem;
+      line-height: 1.6;
+      max-height: 600px;
+      overflow-y: auto;
+      color: var(--navy);
+    }
+
+    #output:empty::before {
+      content: 'Your marketing blueprint will appear here...';
+      color: var(--gray-600);
+      font-style: italic;
+    }
+
+    .validation-message {
+      display: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .validation-message.error {
+      display: block;
+      background: #FEE2E2;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
+    }
+
+    .validation-message.warning {
+      display: block;
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      color: #92400E;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .mode-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn-group .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>EfficientAI</h1>
-      <p>Execution-ready marketing blueprints, instantly.</p>
-    </header>
+    <div class="header">
+      <h1>⚡ EfficientAI</h1>
+      <p>Execution-Ready Marketing Blueprints in 60 Seconds</p>
+    </div>
 
-    <label for="userInput">Enter your business details:</label>
-    <textarea id="userInput" placeholder="Business type:
-Location:
-Ideal customer:
-Main offer(s) + price range:
-Your advantage vs competitors:
-Current channels (IG/FB/Google/Email/etc):
-Monthly budget:
-Goal for next 30 days:
-Constraints (time/team/tools):
-Anything else:"></textarea>
+    <div class="card">
+      <div class="section-title">
+        <span>1️⃣</span>
+        <span>Select Your Business Type</span>
+      </div>
 
-    <div class="hint">Tip: The more specific your inputs, the more “blueprint-level” the output.</div>
+      <div class="mode-selector">
+        <div class="mode-option">
+          <input type="radio" name="businessType" id="local" value="local" checked>
+          <label for="local" class="mode-label">
+            <strong>🏪 Local Business</strong>
+            <small>店舗、サービス、飲食店</small>
+          </label>
+        </div>
+        <div class="mode-option">
+          <input type="radio" name="businessType" id="product" value="product">
+          <label for="product" class="mode-label">
+            <strong>📦 Online Product</strong>
+            <small>eコマース、SaaS、アプリ</small>
+          </label>
+        </div>
+        <div class="mode-option">
+          <input type="radio" name="businessType" id="creator" value="creator">
+          <label for="creator" class="mode-label">
+            <strong>✨ Creator/Course</strong>
+            <small>コース、本、コンテンツ</small>
+          </label>
+        </div>
+        <div class="mode-option">
+          <input type="radio" name="businessType" id="other" value="other">
+          <label for="other" class="mode-label">
+            <strong>💼 Other</strong>
+            <small>その他のビジネス</small>
+          </label>
+        </div>
+      </div>
+    </div>
 
-    <button id="generateBtn" onclick="generateAI()">Generate Professional Blueprint</button>
+    <div class="card">
+      <div class="section-title">
+        <span>2️⃣</span>
+        <span>Provide Business Details</span>
+        <span class="badge">More Details = Better Blueprint</span>
+      </div>
 
-    <div id="output">Results will appear here...</div>
-    <button class="copy-btn" onclick="copyText()">Copy to Clipboard</button>
+      <div class="validation-message" id="validationMsg"></div>
+
+      <form id="inputForm">
+        <div class="form-group">
+          <label class="form-label">Business Name & Type <span class="required">*</span></label>
+          <input type="text" class="form-input" id="businessName" placeholder="例: Tahoe Coffee Roasters - コーヒーショップ" required>
+          <div class="hint">💡 具体的なビジネス名とカテゴリーを入力</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Location (City/Region) <span class="required">*</span></label>
+          <input type="text" class="form-input" id="location" placeholder="例: Truckee, California">
+          <div class="hint">💡 ローカルビジネスの場合は必須</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ideal Customer <span class="required">*</span></label>
+          <textarea class="form-textarea" id="customer" placeholder="例: 30-50歳の観光客とローカルリモートワーカー、高品質なコーヒーを求める人" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Main Offer(s) + Price Range <span class="required">*</span></label>
+          <textarea class="form-textarea" id="offers" placeholder="例: スペシャルティコーヒー $4-7、ペストリー $3-6、コーヒー豆販売 $18-24/bag" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Competitive Advantage</label>
+          <textarea class="form-textarea" id="advantage" placeholder="例: 地元ロースト、Free WiFi、湖の景色、朝7時オープン（競合より早い）"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Current Marketing Channels</label>
+          <input type="text" class="form-input" id="channels" placeholder="例: Instagram (500フォロワー), Google Business Profile, メールリスト無し">
+          <div class="hint">💡 現在使用しているチャネルとその状況</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Monthly Budget (USD) <span class="required">*</span></label>
+          <input type="text" class="form-input" id="budget" placeholder="例: $200" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Goal for Next 30 Days <span class="required">*</span></label>
+          <textarea class="form-textarea" id="goal" placeholder="例: 新規顧客50人獲得、Google口コミ20件、週末売上20%増" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Constraints (Time/Team/Tools)</label>
+          <textarea class="form-textarea" id="constraints" placeholder="例: 週3時間しかマーケティングに使えない、チームは自分だけ、Canva使用可"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Anything Else?</label>
+          <textarea class="form-textarea" id="other" placeholder="例: 冬季は観光客減、夏は混雑、コラボ希望の宿泊施設あり"></textarea>
+          <div class="char-counter">
+            <span id="totalChars">0</span> characters provided
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="generateBtn">
+          <span>🚀 Generate Professional Blueprint</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="loading" id="loadingState">
+      <div class="spinner"></div>
+      <div class="loading-text">Analyzing your business and generating execution-ready blueprint...</div>
+      <div class="loading-text" style="margin-top: 0.5rem; font-size: 0.85rem;">This may take 15-30 seconds</div>
+    </div>
+
+    <div class="card" id="outputCard">
+      <div class="section-title">
+        <span>📋</span>
+        <span>Your Marketing Blueprint</span>
+      </div>
+
+      <div id="output"></div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="copyToClipboard()">
+          📋 Copy to Clipboard
+        </button>
+        <button class="btn btn-secondary" onclick="downloadTxt()">
+          💾 Download as TXT
+        </button>
+        <button class="btn btn-secondary" onclick="resetForm()">
+          🔄 Start Over
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
-    async function generateAI() {
-      const inputEl = document.getElementById('userInput');
-      const btn = document.getElementById('generateBtn');
-      const outputDiv = document.getElementById('output');
+    // Character counter
+    const form = document.getElementById('inputForm');
+    const inputs = form.querySelectorAll('input, textarea');
+    
+    inputs.forEach(input => {
+      input.addEventListener('input', updateCharCount);
+    });
 
-      const input = inputEl.value.trim();
-      if (!input) {
-        outputDiv.innerText = "Please paste your business details first.";
+    function updateCharCount() {
+      let total = 0;
+      inputs.forEach(input => {
+        total += input.value.length;
+      });
+      document.getElementById('totalChars').textContent = total;
+    }
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await generateBlueprint();
+    });
+
+    async function generateBlueprint() {
+      const btn = document.getElementById('generateBtn');
+      const loadingState = document.getElementById('loadingState');
+      const outputCard = document.getElementById('outputCard');
+      const outputDiv = document.getElementById('output');
+      const validationMsg = document.getElementById('validationMsg');
+
+      // Get form data
+      const businessType = document.querySelector('input[name="businessType"]:checked').value;
+      const data = {
+        businessType,
+        businessName: document.getElementById('businessName').value.trim(),
+        location: document.getElementById('location').value.trim(),
+        customer: document.getElementById('customer').value.trim(),
+        offers: document.getElementById('offers').value.trim(),
+        advantage: document.getElementById('advantage').value.trim(),
+        channels: document.getElementById('channels').value.trim(),
+        budget: document.getElementById('budget').value.trim(),
+        goal: document.getElementById('goal').value.trim(),
+        constraints: document.getElementById('constraints').value.trim(),
+        other: document.getElementById('other').value.trim()
+      };
+
+      // Basic validation
+      const requiredFields = ['businessName', 'customer', 'offers', 'budget', 'goal'];
+      const missingFields = requiredFields.filter(field => !data[field]);
+
+      if (missingFields.length > 0) {
+        validationMsg.className = 'validation-message error';
+        validationMsg.textContent = `⚠️ Please fill in required fields: ${missingFields.join(', ')}`;
+        validationMsg.scrollIntoView({ behavior: 'smooth' });
         return;
       }
 
+      // Check minimum detail level
+      const totalChars = Object.values(data).join('').length;
+      if (totalChars < 100) {
+        validationMsg.className = 'validation-message warning';
+        validationMsg.textContent = '⚠️ Please provide more details for a better blueprint. The more specific you are, the more actionable your plan will be.';
+        validationMsg.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      validationMsg.style.display = 'none';
+
+      // Format input for API
+      const input = `Business Type: ${businessType}
+Business: ${data.businessName}
+Location: ${data.location || 'Not specified'}
+Ideal Customer: ${data.customer}
+Main Offers & Pricing: ${data.offers}
+Competitive Advantage: ${data.advantage || 'Not specified'}
+Current Channels: ${data.channels || 'Starting from scratch'}
+Monthly Budget: ${data.budget}
+30-Day Goal: ${data.goal}
+Constraints: ${data.constraints || 'None specified'}
+Additional Context: ${data.other || 'None'}`;
+
+      // UI state
       btn.disabled = true;
-      outputDiv.innerText = "Generating your execution-ready blueprint...";
+      outputCard.classList.remove('visible');
+      loadingState.classList.add('active');
+      outputDiv.textContent = '';
 
       try {
-        const resp = await fetch("/api/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ input })
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input, businessType })
         });
 
-        // Read as text first to avoid "invalid JSON" issues
-        const raw = await resp.text();
-        let data;
+        const rawText = await response.text();
+        let result;
+        
         try {
-          data = JSON.parse(raw);
-        } catch {
-          throw new Error(raw.slice(0, 300));
+          result = JSON.parse(rawText);
+        } catch (parseError) {
+          throw new Error('Server returned invalid response: ' + rawText.substring(0, 200));
         }
 
-        if (!resp.ok) throw new Error(data?.error || "Request failed");
-        outputDiv.innerText = data.output || "(No output returned.)";
-      } catch (err) {
-        outputDiv.innerText = "Error: " + (err?.message || String(err));
+        if (!response.ok) {
+          throw new Error(result.error || `Request failed with status ${response.status}`);
+        }
+
+        if (!result.output) {
+          throw new Error('No output received from server');
+        }
+
+        // Display result
+        outputDiv.textContent = result.output;
+        outputCard.classList.add('visible');
+        outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      } catch (error) {
+        validationMsg.className = 'validation-message error';
+        validationMsg.textContent = '❌ Error: ' + (error.message || 'Something went wrong. Please try again.');
+        validationMsg.style.display = 'block';
+        validationMsg.scrollIntoView({ behavior: 'smooth' });
+        console.error('Generation error:', error);
       } finally {
         btn.disabled = false;
+        loadingState.classList.remove('active');
       }
     }
 
-    function copyText() {
-      const text = document.getElementById('output').innerText;
-      navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
+    function copyToClipboard() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+        }, 2000);
+      }).catch(err => {
+        alert('Failed to copy: ' + err.message);
+      });
     }
+
+    function downloadTxt() {
+      const text = document.getElementById('output').textContent;
+      const businessName = document.getElementById('businessName').value.trim().replace(/[^a-z0-9]/gi, '_');
+      const filename = `${businessName}_marketing_blueprint_${new Date().toISOString().split('T')[0]}.txt`;
+      
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetForm() {
+      if (confirm('Are you sure you want to start over? This will clear all your inputs and results.')) {
+        document.getElementById('inputForm').reset();
+        document.getElementById('output').textContent = '';
+        document.getElementById('outputCard').classList.remove('visible');
+        document.getElementById('validationMsg').style.display = 'none';
+        document.getElementById('totalChars').textContent = '0';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // Initialize
+    updateCharCount();
   </script>
 </body>
 </html>
